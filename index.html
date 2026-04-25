@@ -80,7 +80,7 @@
         position: relative;
       }
       li::before {
-        content: "›";
+        content: '›';
         position: absolute;
         left: 0;
         color: var(--accent);
@@ -143,8 +143,8 @@
       </p>
 
       <div class="status">
-        <strong>Status:</strong> pre-release. <code>0.0.0</code> placeholders
-        on crates.io to reserve names. No public API yet.
+        <strong>Status:</strong> pre-release. <code>0.0.0</code> placeholders on
+        crates.io to reserve names. No public API yet.
       </div>
 
       <h2>crates</h2>
@@ -158,7 +158,10 @@
         <tbody>
           <tr>
             <td><code>hjkl-engine</code></td>
-            <td>Vim FSM + grammar, traits, no I/O deps. <code>no_std + alloc</code>.</td>
+            <td>
+              Vim FSM + grammar, traits, no I/O deps.
+              <code>no_std + alloc</code>.
+            </td>
           </tr>
           <tr>
             <td><code>hjkl-buffer</code></td>
@@ -170,23 +173,46 @@
           </tr>
           <tr>
             <td><code>hjkl-ratatui</code></td>
-            <td>Optional ratatui <code>Style</code> adapters and <code>KeyEvent</code> conversions.</td>
+            <td>
+              Optional ratatui <code>Style</code> adapters and
+              <code>KeyEvent</code> conversions.
+            </td>
           </tr>
         </tbody>
       </table>
 
       <h2>why</h2>
       <ul>
-        <li>Extracted from <a href="https://sqeel.kryptic.sh/">sqeel</a> for reuse across sqeel, <a href="https://buffr.kryptic.sh/">buffr</a>, and a future standalone hjkl binary.</li>
-        <li>One vim implementation, many surfaces. TUI, GUI, browser — same FSM.</li>
-        <li>No I/O in the core. Bring your own renderer, your own clipboard, your own filesystem.</li>
+        <li>
+          Extracted from <a href="https://sqeel.kryptic.sh/">sqeel</a> for reuse
+          across sqeel, <a href="https://buffr.kryptic.sh/">buffr</a>, and a
+          future standalone hjkl binary.
+        </li>
+        <li>
+          One vim implementation, many surfaces. TUI, GUI, browser — same FSM.
+        </li>
+        <li>
+          No I/O in the core. Bring your own renderer, your own clipboard, your
+          own filesystem.
+        </li>
       </ul>
 
       <h2>links</h2>
       <ul>
-        <li><a href="https://github.com/kryptic-sh/hjkl">github.com/kryptic-sh/hjkl</a></li>
-        <li><a href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md">MIGRATION.md</a> — extraction plan and design rationale</li>
-        <li><a href="https://www.kryptic.sh/">kryptic.sh</a> — sibling projects</li>
+        <li>
+          <a href="https://github.com/kryptic-sh/hjkl"
+            >github.com/kryptic-sh/hjkl</a
+          >
+        </li>
+        <li>
+          <a href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md"
+            >MIGRATION.md</a
+          >
+          — extraction plan and design rationale
+        </li>
+        <li>
+          <a href="https://www.kryptic.sh/">kryptic.sh</a> — sibling projects
+        </li>
       </ul>
 
       <footer>
