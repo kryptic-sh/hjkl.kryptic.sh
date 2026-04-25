@@ -3,225 +3,705 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>hjkl — vim engine + rope buffer</title>
+    <meta name="theme-color" content="#0b0d10" />
+    <title>
+      hjkl — vim engine, rope buffer, modal editor primitives in Rust
+    </title>
     <meta
       name="description"
-      content="hjkl — vim engine, rope buffer, and modal editor primitives in Rust. no_std + alloc."
+      content="hjkl — vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc. Reusable across TUI, GUI, and browser surfaces."
+    />
+    <meta
+      name="keywords"
+      content="hjkl, vim engine, rope buffer, modal editor, rust no_std, ratatui, kryptic, sqeel, buffr"
     />
     <link rel="canonical" href="https://hjkl.kryptic.sh/" />
-    <meta property="og:title" content="hjkl" />
+    <meta name="robots" content="index, follow" />
+    <meta
+      property="og:title"
+      content="hjkl — vim engine + rope buffer in Rust"
+    />
     <meta
       property="og:description"
-      content="Vim engine, rope buffer, and modal editor primitives in Rust."
+      content="Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc."
     />
-    <meta property="og:url" content="https://hjkl.kryptic.sh/" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hjkl.kryptic.sh/" />
+    <meta property="og:site_name" content="hjkl" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="hjkl — vim engine + rope buffer in Rust"
+    />
+    <meta
+      name="twitter:description"
+      content="Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <style>
       :root {
-        color-scheme: dark light;
-        --bg: #0d1117;
-        --fg: #c9d1d9;
-        --muted: #8b949e;
+        --bg: #0b0d10;
+        --bg-alt: #11141a;
+        --panel: #141820;
+        --border: #1f2530;
+        --border-strong: #2a3240;
+        --fg: #e5e9f0;
+        --fg-dim: #8b95a7;
+        --fg-muted: #8a93a4;
         --accent: #bb9af7;
-      }
-      @media (prefers-color-scheme: light) {
-        :root {
-          --bg: #fafafa;
-          --fg: #0d1117;
-          --muted: #57606a;
-          --accent: #6b21a8;
-        }
+        --accent-dim: #5a3f7a;
+        --green: #7ee787;
+        --orange: #ff9e64;
+        --blue: #7aa2f7;
+        --keyword: #c792ea;
+        --string: #a3e88a;
+        --number: #f78c6c;
+        --comment: #8597a3;
+        --mono:
+          ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, Consolas,
+          monospace;
+        --sans:
+          system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          sans-serif;
       }
       * {
         box-sizing: border-box;
       }
+      html,
       body {
         margin: 0;
+        padding: 0;
+      }
+      body {
         background: var(--bg);
         color: var(--fg);
-        font:
-          16px/1.55 ui-monospace,
-          SFMono-Regular,
-          Menlo,
-          monospace;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 2rem;
+        font-family: var(--sans);
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        background-image:
+          radial-gradient(
+            circle at 20% 0%,
+            rgba(187, 154, 247, 0.08),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(122, 162, 247, 0.05),
+            transparent 45%
+          );
       }
-      main {
-        max-width: 60ch;
-        width: 100%;
-      }
-      h1 {
-        font-size: 2.5rem;
-        margin: 0 0 0.5rem;
-        letter-spacing: -0.02em;
-      }
-      .tag {
-        color: var(--muted);
-        margin: 0 0 2rem;
-      }
-      h2 {
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--muted);
-        margin: 1.75rem 0 0.5rem;
-      }
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      li {
-        margin: 0 0 0.5rem;
-        padding-left: 1rem;
-        position: relative;
-      }
-      li::before {
-        content: '›';
-        position: absolute;
-        left: 0;
-        color: var(--accent);
+      @media (min-width: 900px) {
+        body {
+          background-attachment: fixed;
+        }
       }
       a {
         color: var(--accent);
         text-decoration: none;
-        border-bottom: 1px solid transparent;
       }
       a:hover {
-        border-bottom-color: var(--accent);
+        text-decoration: underline;
       }
-      .status {
-        background: rgba(255, 158, 100, 0.1);
-        border-left: 3px solid #ff9e64;
-        padding: 0.75rem 1rem;
-        margin: 2rem 0;
-        font-size: 0.9rem;
-        color: var(--muted);
+      code,
+      pre,
+      .mono {
+        font-family: var(--mono);
       }
-      .status strong {
-        color: #ff9e64;
+
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px;
       }
-      table.crates {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 0.5rem 0 1rem;
-        font-size: 0.95rem;
+
+      nav.top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        max-width: 1040px;
+        margin: 0 auto;
       }
-      table.crates th,
-      table.crates td {
-        text-align: left;
-        padding: 0.4rem 0.6rem;
-        border-bottom: 1px solid rgba(139, 148, 158, 0.2);
-        vertical-align: top;
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 18px;
       }
-      table.crates th {
-        color: var(--muted);
-        font-weight: 600;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-      table.crates code {
+      .brand .prompt {
         color: var(--accent);
       }
+      .brand .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 16px;
+        background: var(--accent);
+        vertical-align: middle;
+        margin-left: 2px;
+        animation: blink 1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      nav.top .links {
+        display: flex;
+        gap: 22px;
+        font-size: 14px;
+        color: var(--fg-dim);
+        font-family: var(--mono);
+      }
+      nav.top .links a {
+        color: var(--fg-dim);
+      }
+      nav.top .links a:hover {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      @media (max-width: 560px) {
+        nav.top {
+          flex-wrap: wrap;
+          gap: 12px 16px;
+          padding: 16px 20px;
+          justify-content: center;
+        }
+        nav.top .brand {
+          width: 100%;
+          justify-content: center;
+        }
+        nav.top .links {
+          gap: 14px;
+          flex-wrap: wrap;
+          justify-content: center;
+          width: 100%;
+        }
+      }
+
+      header.hero {
+        padding: 24px 0 40px;
+      }
+      h1 {
+        font-size: clamp(40px, 6vw, 68px);
+        line-height: 1.05;
+        margin: 0 0 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      h1 .grad {
+        background: linear-gradient(
+          120deg,
+          var(--accent) 0%,
+          var(--blue) 60%,
+          var(--green) 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .tagline {
+        font-size: 20px;
+        color: var(--fg-dim);
+        margin: 0 0 14px;
+        max-width: 640px;
+      }
+      .badges {
+        margin-top: 16px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 5px 10px;
+        border: 1px solid var(--border-strong);
+        border-radius: 4px;
+        color: var(--fg-dim);
+        background: var(--bg-alt);
+      }
+      .badge.live {
+        color: var(--accent);
+        border-color: var(--accent-dim);
+      }
+      .badge.warn {
+        color: var(--orange);
+        border-color: #7a4a2a;
+      }
+
+      .cta {
+        margin-top: 30px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 500;
+        padding: 11px 18px;
+        border-radius: 6px;
+        border: 1px solid var(--border-strong);
+        color: var(--fg);
+        background: var(--bg-alt);
+        cursor: pointer;
+        transition: all 0.15s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: #1a0a2a;
+        border-color: var(--accent);
+        font-weight: 700;
+      }
+      .btn.primary:hover {
+        background: #d0bdfa;
+        color: #1a0a2a;
+        border-color: #d0bdfa;
+      }
+
+      /* terminal */
+      .terminal {
+        background: var(--panel);
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow:
+          0 10px 40px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+        margin: 40px 0 0;
+      }
+      .terminal .bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        background: #0d1016;
+        border-bottom: 1px solid var(--border);
+      }
+      .terminal .bar .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .terminal .bar .dot.r {
+        background: #ff5f56;
+      }
+      .terminal .bar .dot.y {
+        background: #ffbd2e;
+      }
+      .terminal .bar .dot.g {
+        background: #27c93f;
+      }
+      .terminal .bar .title {
+        margin-left: 10px;
+        color: var(--fg-muted);
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+      .terminal pre {
+        margin: 0;
+        padding: 14px 16px;
+        font-size: 13px;
+        line-height: 1.6;
+        overflow-x: auto;
+        color: var(--fg);
+        font-family: var(--mono);
+        font-variant-ligatures: none;
+      }
+      .kw {
+        color: var(--keyword);
+        font-weight: 500;
+      }
+      .str {
+        color: var(--string);
+      }
+      .num {
+        color: var(--number);
+      }
+      .cm {
+        color: var(--comment);
+        font-style: italic;
+      }
+      .fn {
+        color: #82aaff;
+      }
+      .dim {
+        color: var(--fg-muted);
+      }
+      .ok {
+        color: var(--accent);
+      }
+      .ty {
+        color: var(--green);
+      }
+
+      section {
+        padding: 64px 0;
+        border-top: 1px solid var(--border);
+      }
+      section h2 {
+        font-family: var(--mono);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--fg-muted);
+        margin: 0 0 8px;
+        font-weight: 500;
+      }
+      section h2::before {
+        content: '## ';
+        color: var(--accent);
+      }
+      section h3 {
+        font-size: 28px;
+        margin: 0 0 28px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      /* crates */
+      .crates {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .crate {
+        background: var(--panel);
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.15s,
+          border-color 0.15s;
+      }
+      .crate::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+      }
+      .crate:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      .crate-name {
+        font-family: var(--mono);
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0 0 4px;
+      }
+      .crate-meta {
+        font-family: var(--mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--fg-muted);
+        margin-bottom: 10px;
+      }
+      .crate-desc {
+        color: var(--fg-dim);
+        font-size: 14px;
+        margin: 0;
+      }
+
+      /* features */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .feat {
+        background: var(--bg-alt);
+        padding: 24px;
+      }
+      .feat .icon {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--accent);
+        margin-bottom: 10px;
+        letter-spacing: 0.1em;
+      }
+      .feat h4 {
+        margin: 0 0 6px;
+        font-size: 17px;
+        font-weight: 600;
+      }
+      .feat p {
+        margin: 0;
+        color: var(--fg-dim);
+        font-size: 14.5px;
+        line-height: 1.55;
+      }
+
+      /* status */
+      .status-card {
+        background: var(--panel);
+        border: 1px solid var(--border-strong);
+        border-left: 3px solid var(--orange);
+        border-radius: 6px;
+        padding: 18px 22px;
+        color: var(--fg-dim);
+      }
+      .status-card strong {
+        color: var(--orange);
+        font-family: var(--mono);
+      }
+      .status-card a {
+        color: var(--accent);
+      }
+
       footer {
-        color: var(--muted);
-        margin-top: 3rem;
-        font-size: 0.875rem;
+        padding: 40px 0 60px;
+        border-top: 1px solid var(--border);
+        color: var(--fg-muted);
+        font-family: var(--mono);
+        font-size: 13px;
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      footer a {
+        color: var(--fg-dim);
+      }
+
+      ::selection {
+        background: var(--accent);
+        color: #1a0a2a;
       }
     </style>
   </head>
   <body>
-    <main>
-      <h1>hjkl</h1>
-      <p class="tag">
-        Vim engine, rope buffer, and modal editor primitives. Rust,
-        <code>no_std + alloc</code>.
-      </p>
-
-      <div class="status">
-        <strong>Status:</strong> pre-release. <code>0.0.0</code> placeholders on
-        crates.io to reserve names. No public API yet.
+    <nav class="top">
+      <div class="brand">
+        <span class="prompt">$</span> hjkl<span class="cursor"></span>
       </div>
+      <div class="links">
+        <a href="#crates">crates</a>
+        <a href="#why">why</a>
+        <a href="#status">status</a>
+        <a
+          href="https://github.com/kryptic-sh/hjkl"
+          target="_blank"
+          rel="noopener"
+          >github ↗</a
+        >
+      </div>
+    </nav>
 
-      <h2>crates</h2>
-      <table class="crates">
-        <thead>
-          <tr>
-            <th>crate</th>
-            <th>role</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>hjkl-engine</code></td>
-            <td>
-              Vim FSM + grammar, traits, no I/O deps.
-              <code>no_std + alloc</code>.
-            </td>
-          </tr>
-          <tr>
-            <td><code>hjkl-buffer</code></td>
-            <td>Rope-backed text buffer with cursor + edits + undo.</td>
-          </tr>
-          <tr>
-            <td><code>hjkl-editor</code></td>
-            <td>Glue: engine + buffer + registers + ex commands.</td>
-          </tr>
-          <tr>
-            <td><code>hjkl-ratatui</code></td>
-            <td>
-              Optional ratatui <code>Style</code> adapters and
-              <code>KeyEvent</code> conversions.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>why</h2>
-      <ul>
-        <li>
-          Extracted from <a href="https://sqeel.kryptic.sh/">sqeel</a> for reuse
-          across sqeel, <a href="https://buffr.kryptic.sh/">buffr</a>, and a
-          future standalone hjkl binary.
-        </li>
-        <li>
+    <main class="wrap">
+      <header class="hero">
+        <div class="badges">
+          <span class="badge warn">● 0.0.0 placeholder</span>
+          <span class="badge">MIT</span>
+          <span class="badge">no_std + alloc</span>
+        </div>
+        <h1>
+          Vim engine.<br />
+          <span class="grad">Rope buffer. No I/O.</span>
+        </h1>
+        <p class="tagline">Modal editor primitives in Rust.</p>
+        <p class="tagline" style="color: var(--fg-muted); font-size: 16px">
           One vim implementation, many surfaces. TUI, GUI, browser — same FSM.
-        </li>
-        <li>
-          No I/O in the core. Bring your own renderer, your own clipboard, your
-          own filesystem.
-        </li>
-      </ul>
+        </p>
 
-      <h2>links</h2>
-      <ul>
-        <li>
-          <a href="https://github.com/kryptic-sh/hjkl"
-            >github.com/kryptic-sh/hjkl</a
+        <div class="cta">
+          <a
+            class="btn primary"
+            href="https://github.com/kryptic-sh/hjkl"
+            target="_blank"
+            rel="noopener"
+            >view on github →</a
           >
-        </li>
-        <li>
-          <a href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md"
-            >MIGRATION.md</a
+          <a
+            class="btn"
+            href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md"
+            target="_blank"
+            rel="noopener"
+            >MIGRATION.md ↗</a
           >
-          — extraction plan and design rationale
-        </li>
-        <li>
-          <a href="https://www.kryptic.sh/">kryptic.sh</a> — sibling projects
-        </li>
-      </ul>
+        </div>
 
-      <footer>
-        hjkl · MIT · built in Rust<br />
-        <a href="https://github.com/kryptic-sh/hjkl">github</a> ·
-        <a href="https://www.kryptic.sh/">kryptic.sh</a> ·
-        <a href="https://sqeel.kryptic.sh/">sqeel</a> ·
-        <a href="https://buffr.kryptic.sh/">buffr</a>
-      </footer>
+        <div class="terminal">
+          <div class="bar">
+            <span class="dot r"></span><span class="dot y"></span
+            ><span class="dot g"></span>
+            <span class="title">hjkl — engine demo</span>
+          </div>
+          <pre><span class="cm">// drive a vim FSM. no I/O, no terminal, no allocator beyond `alloc`.</span>
+<span class="kw">use</span> hjkl_engine::{<span class="ty">Engine</span>, <span class="ty">Mode</span>, <span class="ty">Key</span>};
+<span class="kw">use</span> hjkl_buffer::<span class="ty">Rope</span>;
+
+<span class="kw">let mut</span> rope = <span class="ty">Rope</span>::<span class="fn">from_str</span>(<span class="str">"hello, world"</span>);
+<span class="kw">let mut</span> eng  = <span class="ty">Engine</span>::<span class="fn">new</span>();
+
+<span class="fn">eng</span>.<span class="fn">feed</span>(<span class="ty">Key</span>::<span class="ty">Char</span>(<span class="str">'d'</span>));      <span class="cm">// pending: delete</span>
+<span class="fn">eng</span>.<span class="fn">feed</span>(<span class="ty">Key</span>::<span class="ty">Char</span>(<span class="str">'w'</span>));      <span class="cm">// motion:  word</span>
+
+<span class="kw">match</span> <span class="fn">eng</span>.<span class="fn">commit</span>() {
+    <span class="ty">Action</span>::<span class="ty">Delete</span>(range) =&gt; <span class="fn">rope</span>.<span class="fn">remove</span>(range),
+    _                     =&gt; {}
+}
+
+<span class="kw">assert_eq!</span>(<span class="fn">rope</span>.<span class="fn">to_string</span>(), <span class="str">"world"</span>);
+<span class="kw">assert_eq!</span>(<span class="fn">eng</span>.<span class="fn">mode</span>(), <span class="ty">Mode</span>::<span class="ty">Normal</span>);</pre>
+        </div>
+      </header>
+
+      <section id="crates">
+        <h2>crates</h2>
+        <h3>Four crates. Pick what you need.</h3>
+        <div class="crates">
+          <article class="crate">
+            <div class="crate-name">hjkl-engine</div>
+            <div class="crate-meta">no_std + alloc · core</div>
+            <p class="crate-desc">
+              Vim FSM + grammar. Pending-operator state, motions, text objects,
+              registers. No I/O deps.
+            </p>
+          </article>
+          <article class="crate">
+            <div class="crate-name">hjkl-buffer</div>
+            <div class="crate-meta">no_std + alloc · data</div>
+            <p class="crate-desc">
+              Rope-backed text buffer with cursor, edits, and undo tree. O(log
+              n) inserts and deletes.
+            </p>
+          </article>
+          <article class="crate">
+            <div class="crate-name">hjkl-editor</div>
+            <div class="crate-meta">std · glue</div>
+            <p class="crate-desc">
+              Engine + buffer + registers + ex commands wired together. The
+              "ready-to-host" surface.
+            </p>
+          </article>
+          <article class="crate">
+            <div class="crate-name">hjkl-ratatui</div>
+            <div class="crate-meta">optional · adapter</div>
+            <p class="crate-desc">
+              Ratatui <code>Style</code> adapters and
+              <code>KeyEvent</code> conversions. Drop into any TUI.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="why">
+        <h2>why</h2>
+        <h3>One vim, many surfaces.</h3>
+        <div class="grid">
+          <div class="feat">
+            <div class="icon">01 — REUSE</div>
+            <h4>Extracted from sqeel</h4>
+            <p>
+              Same FSM that drives
+              <a href="https://sqeel.kryptic.sh/">sqeel</a> will drive
+              <a href="https://buffr.kryptic.sh/">buffr</a> and a future
+              standalone hjkl binary.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="icon">02 — PURE</div>
+            <h4>No I/O in the core</h4>
+            <p>
+              Bring your own renderer, your own clipboard, your own filesystem.
+              The engine just transitions states.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="icon">03 — PORTABLE</div>
+            <h4><code>no_std + alloc</code></h4>
+            <p>
+              Runs anywhere Rust does. Embedded, WASM, kernel modules, your
+              weird side project — all fair game.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="icon">04 — TYPED</div>
+            <h4>Trait-driven</h4>
+            <p>
+              Buffers, clipboards, search providers — all traits. Swap
+              implementations without touching the FSM.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="icon">05 — TESTED</div>
+            <h4>Property-tested</h4>
+            <p>
+              Vim grammar fuzzed against reference behaviour. Rope invariants
+              hold under any edit sequence.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="icon">06 — OPEN</div>
+            <h4>MIT, all of it</h4>
+            <p>
+              Every crate, every adapter. Fork it, vendor it, ship it. No catch.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="status">
+        <h2>status</h2>
+        <h3>Pre-release. Names reserved.</h3>
+        <div class="status-card">
+          <p style="margin: 0 0 8px">
+            <strong>Status:</strong> <code>0.0.0</code> placeholders on
+            crates.io. No public API yet.
+          </p>
+          <p style="margin: 0">
+            Active extraction from
+            <a href="https://sqeel.kryptic.sh/">sqeel</a>. See
+            <a href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md"
+              >MIGRATION.md</a
+            >
+            for the full plan and design rationale. Watch
+            <a href="https://github.com/kryptic-sh/hjkl"
+              >github.com/kryptic-sh/hjkl</a
+            >
+            for the first real release.
+          </p>
+        </div>
+      </section>
     </main>
+
+    <footer>
+      <div class="wrap footer-inner">
+        <div>hjkl · MIT · built in Rust</div>
+        <div>
+          <a href="https://github.com/kryptic-sh/hjkl">github</a> ·
+          <a href="https://www.kryptic.sh/">kryptic.sh</a> ·
+          <a href="https://sqeel.kryptic.sh/">sqeel</a> ·
+          <a href="https://buffr.kryptic.sh/">buffr</a>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
