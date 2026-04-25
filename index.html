@@ -46,6 +46,18 @@
     />
     <meta name="twitter:image" content="https://hjkl.kryptic.sh/og-image.png" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "hjkl",
+        "description": "Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc.",
+        "url": "https://hjkl.kryptic.sh/",
+        "programmingLanguage": "Rust",
+        "license": "https://opensource.org/licenses/MIT",
+        "codeRepository": "https://github.com/kryptic-sh/hjkl"
+      }
+    </script>
     <!-- Google tag (gtag.js) -->
     <script>
       (function () {
@@ -385,6 +397,8 @@
       section {
         padding: 64px 0;
         border-top: 1px solid var(--border);
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 800px;
       }
       section h2 {
         font-family: var(--mono);
