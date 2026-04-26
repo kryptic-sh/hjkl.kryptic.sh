@@ -21,12 +21,12 @@
     <text x="80" y="150" font-size="42" fill="#bb9af7">$ hjkl<tspan fill="#bb9af7">_</tspan></text>
   </g>
   <g font-family="Inter, system-ui, -apple-system, sans-serif" font-weight="700">
-    <text x="80" y="290" font-size="88" fill="#e5e9f0">Vim engine.</text>
-    <text x="80" y="395" font-size="88" fill="url(#g)">Rope buffer. No I/O.</text>
+    <text x="80" y="290" font-size="88" fill="#e5e9f0">Modal editor.</text>
+    <text x="80" y="395" font-size="88" fill="url(#g)">Reusable engine.</text>
   </g>
   <g font-family="Inter, system-ui, -apple-system, sans-serif">
-    <text x="80" y="470" font-size="32" fill="#8b95a7" font-weight="500">Modal editor primitives in Rust.</text>
-    <text x="80" y="515" font-size="32" fill="#8b95a7" font-weight="500">no_std + alloc. One vim, many surfaces.</text>
+    <text x="80" y="470" font-size="32" fill="#8b95a7" font-weight="500">A vim-style editor in Rust — and the engine that powers it.</text>
+    <text x="80" y="515" font-size="32" fill="#8b95a7" font-weight="500">One FSM. The hjkl editor + sqeel, buffr, inbx.</text>
   </g>
   <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="500">
     <rect x="80" y="560" width="160" height="36" rx="4" fill="#11141a" stroke="#7a4a2a"/>

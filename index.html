@@ -4,24 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#bb9af7" />
-    <title>hjkl — vim engine + rope buffer in Rust</title>
+    <title>hjkl — modal editor + vim engine in Rust</title>
     <meta
       name="description"
-      content="hjkl — vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc. Reusable across TUI, GUI, and browser surfaces."
+      content="hjkl — a vim-style modal editor in Rust. Built on a reusable engine, rope buffer, and editor primitives that also power sqeel, buffr, and inbx. no_std + alloc."
     />
     <meta
       name="keywords"
-      content="hjkl, vim engine, rope buffer, modal editor, rust no_std, ratatui, kryptic, sqeel, buffr"
+      content="hjkl, vim editor, modal editor, vim engine, rope buffer, rust editor, rust no_std, ratatui, kryptic, sqeel, buffr"
     />
     <link rel="canonical" href="https://hjkl.kryptic.sh/" />
     <meta name="robots" content="index, follow" />
     <meta
       property="og:title"
-      content="hjkl — vim engine + rope buffer in Rust"
+      content="hjkl — modal editor + vim engine in Rust"
     />
     <meta
       property="og:description"
-      content="Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc."
+      content="A vim-style modal editor in Rust. Engine, rope buffer, and editor primitives reused across sqeel, buffr, and inbx."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://hjkl.kryptic.sh/" />
@@ -31,16 +31,16 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="hjkl — vim engine, rope buffer, and modal editor primitives in Rust"
+      content="hjkl — modal editor + vim engine in Rust"
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="hjkl — vim engine + rope buffer in Rust"
+      content="hjkl — modal editor + vim engine in Rust"
     />
     <meta
       name="twitter:description"
-      content="Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc."
+      content="A vim-style modal editor in Rust. Engine, rope buffer, and editor primitives reused across sqeel, buffr, and inbx."
     />
     <meta name="twitter:image" content="https://hjkl.kryptic.sh/og-image.png" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -52,7 +52,7 @@
         "@context": "https://schema.org",
         "@type": "SoftwareSourceCode",
         "name": "hjkl",
-        "description": "Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc.",
+        "description": "A vim-style modal editor in Rust. Built on a reusable engine, rope buffer, and editor primitives.",
         "url": "https://hjkl.kryptic.sh/",
         "programmingLanguage": "Rust",
         "license": "https://opensource.org/licenses/MIT",
@@ -635,12 +635,12 @@
           <span class="badge">no_std + alloc</span>
         </div>
         <h1>
-          Vim engine.<br />
-          <span class="grad">Rope buffer. No I/O.</span>
+          Modal editor.<br />
+          <span class="grad">Reusable engine.</span>
         </h1>
-        <p class="tagline">Modal editor primitives in Rust.</p>
+        <p class="tagline">A vim-style editor in Rust — and the engine that powers it.</p>
         <p class="tagline" style="color: var(--fg-muted); font-size: 16px">
-          One vim implementation, many surfaces. TUI, GUI, browser — same FSM.
+          One vim implementation, many surfaces. The hjkl editor + sqeel, buffr, inbx. Same FSM.
         </p>
 
         <div class="cta">
@@ -731,12 +731,13 @@
         <div class="grid">
           <div class="feat">
             <div class="icon">01 — REUSE</div>
-            <h4>Extracted from sqeel</h4>
+            <h4>One FSM, many surfaces</h4>
             <p>
               Same FSM that drives
-              <a href="https://sqeel.kryptic.sh/">sqeel</a> will drive
-              <a href="https://buffr.kryptic.sh/">buffr</a> and a future
-              standalone hjkl binary.
+              <a href="https://sqeel.kryptic.sh/">sqeel</a>,
+              <a href="https://buffr.kryptic.sh/">buffr</a>, and
+              <a href="https://inbx.kryptic.sh/">inbx</a> drives the standalone
+              hjkl editor.
             </p>
           </div>
           <div class="feat">

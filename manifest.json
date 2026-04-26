@@ -1,7 +1,7 @@
 {
   "name": "hjkl",
   "short_name": "hjkl",
-  "description": "Vim engine, rope buffer, and modal editor primitives. Rust, no_std + alloc.",
+  "description": "A vim-style modal editor in Rust. Built on a reusable engine, rope buffer, and editor primitives.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
