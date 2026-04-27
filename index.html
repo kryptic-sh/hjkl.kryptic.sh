@@ -630,7 +630,7 @@
     <main class="wrap">
       <header class="hero">
         <div class="badges">
-          <span class="badge live">● 0.1.0 · stable</span>
+          <span class="badge live">● 0.3.0 · stable</span>
           <span class="badge">MIT</span>
           <span class="badge">no_std + alloc</span>
         </div>
@@ -638,9 +638,12 @@
           Modal editor.<br />
           <span class="grad">Reusable engine.</span>
         </h1>
-        <p class="tagline">A vim-style editor in Rust — and the engine that powers it.</p>
+        <p class="tagline">
+          A vim-style editor in Rust — and the engine that powers it.
+        </p>
         <p class="tagline" style="color: var(--fg-muted); font-size: 16px">
-          One vim implementation, many surfaces. The hjkl editor + sqeel, buffr, inbx. Same FSM.
+          Multi-buffer TUI editor with fuzzy file/buffer/grep pickers and
+          tree-sitter highlighting. Same FSM also drives sqeel, buffr, inbx.
         </p>
 
         <div class="cta">
@@ -653,10 +656,17 @@
           >
           <a
             class="btn"
-            href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md"
+            href="https://crates.io/crates/hjkl"
             target="_blank"
             rel="noopener"
-            >MIGRATION.md ↗</a
+            >cargo install hjkl ↗</a
+          >
+          <a
+            class="btn"
+            href="https://github.com/kryptic-sh/hjkl/blob/main/CHANGELOG.md"
+            target="_blank"
+            rel="noopener"
+            >CHANGELOG ↗</a
           >
         </div>
 
@@ -688,8 +698,17 @@
 
       <section id="crates">
         <h2>crates</h2>
-        <h3>Four crates. Pick what you need.</h3>
+        <h3>One binary. Nine crates. Pick what you need.</h3>
         <div class="crates">
+          <article class="crate">
+            <div class="crate-name">hjkl</div>
+            <div class="crate-meta">binary · TUI app</div>
+            <p class="crate-desc">
+              The standalone editor. <code>cargo install hjkl</code> —
+              multi-buffer, pickers, tree-sitter, smart indent,
+              <code>.editorconfig</code>.
+            </p>
+          </article>
           <article class="crate">
             <div class="crate-name">hjkl-engine</div>
             <div class="crate-meta">no_std + alloc · core</div>
@@ -715,11 +734,47 @@
             </p>
           </article>
           <article class="crate">
+            <div class="crate-name">hjkl-tree-sitter</div>
+            <div class="crate-meta">std · highlighting</div>
+            <p class="crate-desc">
+              Bundled grammars (Rust, Markdown, JSON, TOML, SQL) with
+              Neovim-flavoured themes and a comment-marker overlay
+              (TODO/FIXME/NOTE/WARN).
+            </p>
+          </article>
+          <article class="crate">
+            <div class="crate-name">hjkl-picker</div>
+            <div class="crate-meta">std · UI</div>
+            <p class="crate-desc">
+              Fuzzy picker subsystem. <code>Picker</code>,
+              <code>PickerLogic</code>, <code>FileSource</code>,
+              <code>RgSource</code>, scorer. Reusable across hosts.
+            </p>
+          </article>
+          <article class="crate">
+            <div class="crate-name">hjkl-form</div>
+            <div class="crate-meta">std · UI</div>
+            <p class="crate-desc">
+              Single-line form input built on the engine. Powers
+              <code>:</code> / <code>/</code> prompts and picker query lines.
+            </p>
+          </article>
+          <article class="crate">
+            <div class="crate-name">hjkl-clipboard</div>
+            <div class="crate-meta">std · adapter</div>
+            <p class="crate-desc">
+              System clipboard adapter. Bridges <code>"+</code> /
+              <code>"*</code>
+              registers to the OS pasteboard.
+            </p>
+          </article>
+          <article class="crate">
             <div class="crate-name">hjkl-ratatui</div>
             <div class="crate-meta">optional · adapter</div>
             <p class="crate-desc">
-              Ratatui <code>Style</code> adapters and
-              <code>KeyEvent</code> conversions. Drop into any TUI.
+              Ratatui <code>Style</code> adapters,
+              <code>KeyEvent</code> conversions, and a shared braille spinner.
+              Drop into any TUI.
             </p>
           </article>
         </div>
@@ -784,23 +839,34 @@
 
       <section id="status">
         <h2>status</h2>
-        <h3>0.1.0 shipped. SPEC frozen.</h3>
+        <h3>0.3.0 shipped. SPEC frozen since 0.1.0.</h3>
         <div class="status-card">
           <p style="margin: 0 0 8px">
-            <strong>Status:</strong> <code>0.1.0</code> on crates.io — all four
-            crates (<code>hjkl-buffer</code>, <code>hjkl-engine</code>,
-            <code>hjkl-editor</code>, <code>hjkl-ratatui</code>). SPEC frozen
-            2026-04-27. Buffer trait sealed at 14 methods across
-            <code>Cursor</code> / <code>Query</code> / <code>BufferEdit</code> /
-            <code>Search</code>. <code>Editor&lt;B, H&gt;</code> is generic over
-            backend and host, with viewport on the <code>Host</code> trait for
-            GUI/TUI parity. Pre-1.0 churn phase is over.
+            <strong>Status:</strong> <code>0.3.0</code> on crates.io —
+            standalone <code>hjkl</code> binary plus eight library crates
+            (<code>hjkl-buffer</code>, <code>hjkl-engine</code>,
+            <code>hjkl-editor</code>, <code>hjkl-tree-sitter</code>,
+            <code>hjkl-picker</code>, <code>hjkl-form</code>,
+            <code>hjkl-clipboard</code>, <code>hjkl-ratatui</code>). 0.3.0 adds
+            multi-buffer editing, fuzzy file/buffer/grep pickers with
+            syntax-highlighted preview, tree-sitter highlighting + comment
+            markers, smart indent, <code>.editorconfig</code>, and
+            <code>softtabstop</code>.
+          </p>
+          <p style="margin: 0 0 8px">
+            <strong>SPEC frozen 2026-04-27.</strong> Buffer trait sealed at 14
+            methods across <code>Cursor</code> / <code>Query</code> /
+            <code>BufferEdit</code> / <code>Search</code>.
+            <code>Editor&lt;B, H&gt;</code> is generic over backend and host,
+            with viewport on the <code>Host</code> trait for GUI/TUI parity.
+            0.1.x → 0.3.x is additive — no breaking changes to the trait
+            surface.
           </p>
           <p style="margin: 0">
             <a href="https://sqeel.kryptic.sh/">sqeel</a>,
             <a href="https://buffr.kryptic.sh/">buffr</a>, and
             <a href="https://inbx.kryptic.sh/">inbx</a> all run on
-            <code>hjkl 0.1.0</code> from crates.io. See
+            <code>hjkl</code> from crates.io. See
             <a href="https://github.com/kryptic-sh/hjkl/blob/main/CHANGELOG.md"
               >CHANGELOG</a
             >
