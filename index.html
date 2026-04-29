@@ -104,8 +104,12 @@
         --string: #a3e88a;
         --number: #f78c6c;
         --comment: #8597a3;
-        --mono: "Hack", "JetBrains Mono", "DejaVu Sans Mono", "Liberation Mono", monospace;
-        --sans: "Hack", "JetBrains Mono", "DejaVu Sans Mono", "Liberation Mono", monospace;
+        --mono:
+          'Hack', 'JetBrains Mono', 'DejaVu Sans Mono', 'Liberation Mono',
+          monospace;
+        --sans:
+          'Hack', 'JetBrains Mono', 'DejaVu Sans Mono', 'Liberation Mono',
+          monospace;
       }
       * {
         box-sizing: border-box;
@@ -482,6 +486,12 @@
         transition:
           transform 0.15s,
           border-color 0.15s;
+        display: block;
+        color: inherit;
+        text-decoration: none;
+      }
+      a.crate:hover .crate-name {
+        text-decoration: underline;
       }
       .crate::before {
         content: '';
@@ -696,9 +706,14 @@
 
       <section id="crates">
         <h2>crates</h2>
-        <h3>One binary. Nine crates. Pick what you need.</h3>
+        <h3>One binary. Eight ecosystem crates. Each in its own repo.</h3>
         <div class="crates">
-          <article class="crate">
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl</div>
             <div class="crate-meta">binary · TUI app</div>
             <p class="crate-desc">
@@ -706,32 +721,52 @@
               multi-buffer, pickers, tree-sitter, smart indent,
               <code>.editorconfig</code>.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-engine"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-engine</div>
             <div class="crate-meta">no_std + alloc · core</div>
             <p class="crate-desc">
               Vim FSM + grammar. Pending-operator state, motions, text objects,
               registers. No I/O deps.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-buffer"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-buffer</div>
             <div class="crate-meta">no_std + alloc · data</div>
             <p class="crate-desc">
               Rope-backed text buffer with cursor, edits, and undo tree. O(log
               n) inserts and deletes.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-editor"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-editor</div>
             <div class="crate-meta">std · glue</div>
             <p class="crate-desc">
               Engine + buffer + registers + ex commands wired together. The
               "ready-to-host" surface.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-tree-sitter"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-tree-sitter</div>
             <div class="crate-meta">std · highlighting</div>
             <p class="crate-desc">
@@ -739,8 +774,13 @@
               Neovim-flavoured themes and a comment-marker overlay
               (TODO/FIXME/NOTE/WARN).
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-picker"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-picker</div>
             <div class="crate-meta">std · UI</div>
             <p class="crate-desc">
@@ -748,16 +788,26 @@
               <code>PickerLogic</code>, <code>FileSource</code>,
               <code>RgSource</code>, scorer. Reusable across hosts.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-form"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-form</div>
             <div class="crate-meta">std · UI</div>
             <p class="crate-desc">
               Single-line form input built on the engine. Powers
               <code>:</code> / <code>/</code> prompts and picker query lines.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-clipboard"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-clipboard</div>
             <div class="crate-meta">std · adapter</div>
             <p class="crate-desc">
@@ -765,8 +815,13 @@
               <code>"*</code>
               registers to the OS pasteboard.
             </p>
-          </article>
-          <article class="crate">
+          </a>
+          <a
+            class="crate"
+            href="https://github.com/kryptic-sh/hjkl-ratatui"
+            target="_blank"
+            rel="noopener"
+          >
             <div class="crate-name">hjkl-ratatui</div>
             <div class="crate-meta">optional · adapter</div>
             <p class="crate-desc">
@@ -774,7 +829,7 @@
               <code>KeyEvent</code> conversions, and a shared braille spinner.
               Drop into any TUI.
             </p>
-          </article>
+          </a>
         </div>
       </section>
 
@@ -864,19 +919,14 @@
             <a href="https://sqeel.kryptic.sh/">sqeel</a>,
             <a href="https://buffr.kryptic.sh/">buffr</a>, and
             <a href="https://inbx.kryptic.sh/">inbx</a> all run on
-            <code>hjkl</code> from crates.io. See
+            <code>hjkl</code> from crates.io. Each crate now lives in its own
+            repo under
+            <a href="https://github.com/kryptic-sh">github.com/kryptic-sh</a>;
+            click any crate card above to jump to its source. See the
             <a href="https://github.com/kryptic-sh/hjkl/blob/main/CHANGELOG.md"
-              >CHANGELOG</a
+              >hjkl CHANGELOG</a
             >
-            for releases and
-            <a href="https://github.com/kryptic-sh/hjkl/blob/main/MIGRATION.md"
-              >MIGRATION.md</a
-            >
-            for the path forward. Watch
-            <a href="https://github.com/kryptic-sh/hjkl"
-              >github.com/kryptic-sh/hjkl</a
-            >
-            for what comes next.
+            for binary releases.
           </p>
         </div>
       </section>
