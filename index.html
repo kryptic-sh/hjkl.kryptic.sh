@@ -639,7 +639,7 @@
     <main class="wrap">
       <header class="hero">
         <div class="badges">
-          <span class="badge live">● 0.3.0 · stable</span>
+          <span class="badge live">● 0.7.0 · stable</span>
           <span class="badge">MIT</span>
           <span class="badge">no_std + alloc</span>
         </div>
@@ -764,16 +764,17 @@
           </a>
           <a
             class="crate"
-            href="https://github.com/kryptic-sh/hjkl-tree-sitter"
+            href="https://github.com/kryptic-sh/hjkl-bonsai"
             target="_blank"
             rel="noopener"
           >
-            <div class="crate-name">hjkl-tree-sitter</div>
+            <div class="crate-name">hjkl-bonsai</div>
             <div class="crate-meta">std · highlighting</div>
             <p class="crate-desc">
-              Bundled grammars (Rust, Markdown, JSON, TOML, SQL) with
-              Neovim-flavoured themes and a comment-marker overlay
-              (TODO/FIXME/NOTE/WARN).
+              Runtime grammar loader. Clones, compiles, and caches
+              <code>tree-sitter-*</code> grammars on demand with
+              Neovim-flavoured themes and comment-marker overlay
+              (TODO/FIXME/NOTE/WARN). Zero grammars baked into the binary.
             </p>
           </a>
           <a
@@ -893,41 +894,40 @@
 
       <section id="status">
         <h2>status</h2>
-        <h3>0.3.0 shipped. SPEC frozen since 0.1.0.</h3>
+        <h3>0.7.0 · current release.</h3>
         <div class="status-card">
           <p style="margin: 0 0 8px">
-            <strong>Status:</strong> <code>0.3.0</code> on crates.io —
+            <strong>Status:</strong> <code>0.7.0</code> on crates.io —
             standalone <code>hjkl</code> binary plus eight library crates
             (<code>hjkl-buffer</code>, <code>hjkl-engine</code>,
-            <code>hjkl-editor</code>, <code>hjkl-tree-sitter</code>,
+            <code>hjkl-editor</code>, <code>hjkl-bonsai</code>,
             <code>hjkl-picker</code>, <code>hjkl-form</code>,
-            <code>hjkl-clipboard</code>, <code>hjkl-ratatui</code>). 0.3.0 adds
-            multi-buffer editing, fuzzy file/buffer/grep pickers with
-            syntax-highlighted preview, tree-sitter highlighting + comment
-            markers, smart indent, <code>.editorconfig</code>, and
-            <code>softtabstop</code>.
+            <code>hjkl-clipboard</code>, <code>hjkl-ratatui</code>).
           </p>
           <p style="margin: 0 0 8px">
-            <strong>SPEC frozen 2026-04-27.</strong> Buffer trait sealed at 14
-            methods across <code>Cursor</code> / <code>Query</code> /
-            <code>BufferEdit</code> / <code>Search</code>.
-            <code>Editor&lt;B, H&gt;</code> is generic over backend and host,
-            with viewport on the <code>Host</code> trait for GUI/TUI parity.
-            0.1.x → 0.3.x is additive — no breaking changes to the trait
-            surface.
+            <strong>Headline since 0.3.0:</strong>
+            runtime grammar loading via <code>hjkl-bonsai</code> shrank the
+            release binary from <strong>31 MB → 5.1 MB</strong> (grammars now
+            cloned + compiled on demand, or pre-installed by distro).
+            Capability-aware clipboard via <code>hjkl-clipboard</code> 0.5 with
+            <code>:clipboard</code> diagnostic ex command, OSC 52 SSH fallback,
+            and image / rich-text capability flags. TOML-driven UI + syntax
+            theme matching the website palette. Expanded packaging: aarch64
+            Linux, musl, <code>.deb</code>, <code>.rpm</code>, AUR
+            <code>hjkl-bin</code>.
           </p>
           <p style="margin: 0">
             <a href="https://sqeel.kryptic.sh/">sqeel</a>,
             <a href="https://buffr.kryptic.sh/">buffr</a>, and
             <a href="https://inbx.kryptic.sh/">inbx</a> all run on
-            <code>hjkl</code> from crates.io. Each crate now lives in its own
-            repo under
+            <code>hjkl</code> from crates.io. Each crate lives in its own repo
+            under
             <a href="https://github.com/kryptic-sh">github.com/kryptic-sh</a>;
             click any crate card above to jump to its source. See the
             <a href="https://github.com/kryptic-sh/hjkl/blob/main/CHANGELOG.md"
               >hjkl CHANGELOG</a
             >
-            for binary releases.
+            for full release notes.
           </p>
         </div>
       </section>
